@@ -21,7 +21,7 @@
 
 **聚合管道查询演示案例**
 
-- [传送门](http://10.20.120.91:3000/team/mdao/src/master/example/aggregate_lookup.go)
+- [传送门](https://github.com/dev-means/undao/blob/master/example/aggregate_lookup.go)
 
 <br>
 
