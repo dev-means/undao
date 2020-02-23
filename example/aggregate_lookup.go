@@ -4,16 +4,16 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/dev-means/undao"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"mdao"
 )
 
 //----------------------------------------------------------------------------------------------------------------------
 
 // 1. 连接数据库，创建集合句柄
 
-var DB = mdao.NewStorageDatabase(false, "127.0.0.1:28000", "demo", "", "", "")
+var DB = undao.NewStorageDatabase(false, "127.0.0.1:28000", "demo", "", "", "")
 
 var (
 	coll_User = DB.Collection("users")
@@ -67,10 +67,10 @@ func insertTestSet() {
 			Num:    i + 1,
 		}
 
-		if e := mdao.Add(coll_User, context.Background(), &u); e != nil {
+		if e := undao.Add(coll_User, context.Background(), &u); e != nil {
 			panic(e)
 		}
-		if e := mdao.Add(coll_Post, context.Background(), &p); e != nil {
+		if e := undao.Add(coll_Post, context.Background(), &p); e != nil {
 			panic(e)
 		}
 	}
@@ -78,17 +78,17 @@ func insertTestSet() {
 
 //----------------------------------------------------------------------------------------------------------------------
 
-// 4. 使用 mdao.GetList() 作聚合管道查询
+// 4. 使用 undao.GetList() 作聚合管道查询
 
 func find() {
-	var lookup = mdao.AggregateLookup{
+	var lookup = undao.AggregateLookup{
 		From:         "users",
 		LocalField:   "as.userId",
 		ForeignField: "_id",
 		As:           "lookup.user",
 		Project:      bson.M{"name": 1},
 	}
-	ctx, cur, total, e := mdao.GetList(coll_Post, 3, 1,
+	ctx, cur, total, e := undao.GetList(coll_Post, 3, 1,
 		bson.M{},
 		bson.D{
 			{Key: "_id", Value: -1},
