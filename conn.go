@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 	"github.com/256dpi/lungo"
-	"github.com/dev-means/quark"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 	"os"
+	"time"
 )
 
 func NewStorageMemory(name string) (lungo.IDatabase, *lungo.Engine) {
@@ -59,7 +59,9 @@ func NewStorageDatabase(auth bool, nodes string, name, user, pwd, replicaSet str
 	}
 	err = client.Ping(context.Background(), readpref.Primary())
 	if err != nil {
-		quark.NewError(err, "undao.NewStorageDatabase().client.Ping()")
+		text := fmt.Sprintf("%s [  ERROR  ] %s: %s\n",
+			time.Now().Local().Format("2006/01/02 15:04:05"), "undao.NewStorageDatabase().client.Ping()", err.Error())
+		fmt.Println(text)
 		os.Exit(1)
 	}
 	return client.Database(name)
